@@ -19,6 +19,8 @@
             <p class="brand-sub">Seu estúdio de música na web.</p>
         </div>
         <div class="header-actions" style="display:flex;gap:8px;align-items:center">
+            <!-- Botão de menu para mobile: alterna a coluna de opções -->
+            <button id="menu-toggle" class="theme-toggle-btn" aria-label="Abrir menu">Menu</button>
             <button id="manual-toggle" class="theme-toggle-btn" aria-label="Abrir manual">Manual</button>
             <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
                 <!-- Sun icon (shown in dark mode to switch to light) -->
@@ -32,6 +34,8 @@
                 </svg>
             </button>
         </div>
+        <!-- overlay usado para fechar o menu de opções em mobile -->
+        <div id="menu-overlay" class="menu-overlay hidden"></div>
     </div>
     <div class="BibliotecaDeAudio p-4">
         <h2 class="font-bold mb-2">Biblioteca de Áudio</h2>

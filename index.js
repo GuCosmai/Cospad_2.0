@@ -56,6 +56,9 @@ const themeToggle = document.getElementById('theme-toggle');
 const manualToggle = document.getElementById('manual-toggle');
 const manualFooter = document.getElementById('manual-footer');
 const manualClose = document.getElementById('manual-close');
+const menuToggle = document.getElementById('menu-toggle');
+const optionsColumn = document.querySelector('.options');
+const menuOverlay = document.getElementById('menu-overlay');
 
 // Tema: light/dark via mudanças nas CSS variables
 function applyTheme(theme) {
@@ -100,6 +103,44 @@ if (manualClose && manualFooter) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
+
+// Menu toggle para mobile: alterna visibilidade da coluna de opções
+if (menuToggle && optionsColumn) {
+    menuToggle.addEventListener('click', () => {
+        optionsColumn.classList.toggle('open');
+        if (menuOverlay) menuOverlay.classList.toggle('hidden');
+        // rola pra coluna de opções quando abre
+        if (optionsColumn.classList.contains('open')) optionsColumn.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Fecha o menu automáticamente quando a janela for maior que 600px
+    window.addEventListener('resize', () => {
+        try {
+            if (window.innerWidth > 600 && optionsColumn.classList.contains('open')) {
+                optionsColumn.classList.remove('open');
+                if (menuOverlay) menuOverlay.classList.add('hidden');
+            }
+        } catch (e) { /* noop */ }
+    });
+}
+
+// Fecha o menu ao clicar no overlay
+if (menuOverlay && optionsColumn) {
+    menuOverlay.addEventListener('click', () => {
+        optionsColumn.classList.remove('open');
+        menuOverlay.classList.add('hidden');
+    });
+}
+
+// Fecha o menu se o usuário tocar em um pad (melhor para mobile — evita menu aberto cobrindo interface)
+document.addEventListener('click', (e) => {
+    if (!optionsColumn) return;
+    const pad = e.target.closest('.drum-pad');
+    if (pad && optionsColumn.classList.contains('open')) {
+        optionsColumn.classList.remove('open');
+        if (menuOverlay) menuOverlay.classList.add('hidden');
+    }
+});
 
         
         // Verifica se os elementos do DOM necessários existem
