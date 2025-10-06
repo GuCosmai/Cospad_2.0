@@ -1,0 +1,143 @@
+:root{
+    --bg-1: #0b1020;
+    --card: rgba(255,255,255,0.06);
+    --muted: rgba(255,255,255,0.6);
+    --accent: #ffc107;
+}
+
+*{box-sizing:border-box}
+body {
+    margin: 0;
+    padding: 24px;
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        background: linear-gradient(180deg, var(--bg-1), rgba(12,16,30,0.9)), url('Space-Background-Image-3-1536x1024.jpg') center/cover no-repeat;
+    color: #e6eef8;
+}
+
+.parent {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 8px;
+}
+    
+.header {
+    grid-column: 1 / -1;
+    background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+    display:flex;align-items:center;justify-content:space-between;
+}
+
+.header h1{margin:0;font-weight:700;color:var(--accent)}
+
+.brand {
+    font-size: 44px;
+    margin: 0;
+    font-weight: 800;
+    background: linear-gradient(90deg,#7c3aed,#f43f5e,#2563eb);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+.brand-sub{margin:6px 0 0 0;color:rgba(255,255,255,0.7);}
+
+.theme-toggle-btn{background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));border-radius:8px;padding:8px;border:1px solid rgba(255,255,255,0.04);display:inline-flex;align-items:center;justify-content:center}
+.theme-toggle-btn .icon{display:none;color:rgba(255,255,255,0.95)}
+/* show sun in dark theme (so clicking it goes to light) */
+body:not(.light-theme) .theme-toggle-btn .icon-sun{display:inline-block}
+/* show moon in light theme */
+body.light-theme .theme-toggle-btn .icon-moon{display:inline-block}
+
+.BibliotecaDeAudio {
+    /* layout placement kept from original */
+    grid-column: span 2 / span 2;
+    grid-row: span 3 / span 3;
+    grid-row-start: 2;
+    /* visual update */
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    margin: 6px;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.BibliotecaDeAudio h2{margin:0 0 8px 0}
+.BibliotecaDeAudio #audio-drop-zone{
+    background: rgba(255,255,255,0.03);
+    border-radius:8px;
+    border: 1px dashed rgba(255,255,255,0.08);
+}
+.audio-item{display:flex;justify-content:space-between;align-items:center;padding:8px;border-radius:6px;background:rgba(255,255,255,0.02)}
+
+.options {
+    /* layout placement from original */
+    grid-row: span 3 / span 3;
+    grid-column-start: 3;
+    grid-row-start: 2;
+    /* visual */
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+    border: 1px solid rgba(255,255,255,0.04);
+}
+
+.options button{border:none;cursor:pointer}
+
+.pads {
+    /* Keep original placement */
+    grid-column: span 2 / span 2;
+    grid-row: span 3 / span 3;
+    grid-column-start: 4;
+    grid-row-start: 2;
+    /* visual improvements */
+    box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+    border-radius: 10px;
+    margin: 6px;
+    padding: 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    border: 1px solid rgba(255,255,255,0.03);
+}
+
+.pads h1{margin-top:0}
+.drum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* Estilo base para um pad grande */
+.drum-pad{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;padding:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:96px;cursor:pointer;border:2px solid transparent;transition:all .12s ease;
+}
+.drum-pad:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(2,6,23,0.6)}
+.drum-pad .key{font-size:22px;font-weight:700}
+.drum-pad .label{font-size:12px;color:var(--muted);margin-top:6px}
+.drum-pad .edit-btn{position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.25);border-radius:6px;padding:4px}
+
+        /* pequenos ajustes para efeitos */
+.active-pad{transform:translateY(2px) scale(.98);opacity:.95}
+
+.faixas{
+    grid-column: span 5 / span 5;
+    grid-row-start: 5;
+    box-shadow: 0 10px 30px rgba(2,6,23,0.55);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: 10px;
+    padding: 14px;
+}
+
+.tracks-list .track-row{display:flex;align-items:center;justify-content:space-between;padding:8px;background:rgba(255,255,255,0.02);border-radius:8px}
+.tracks-list .track-row .name{font-weight:600}
+.tracks-list .track-row .controls{display:flex;gap:8px;align-items:center}
+
+.hidden{display:none}
+
+/* Manual footer */
+.manual-footer{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(180deg,rgba(0,0,0,0.9),rgba(0,0,0,0.95));color:#fff;padding:20px 24px;box-shadow:0 -8px 30px rgba(0,0,0,0.6);z-index:60}
+.manual-footer .manual-content{max-width:1100px;margin:0 auto}
+.manual-footer h2{margin:0 0 8px 0}
+.manual-footer ul{margin:8px 0 12px 18px}
+.manual-footer .bg-gray-300{background:#fff;color:#111}

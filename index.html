@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CosPad</title>
+    <!-- Tailwind via CDN para utilitários usados no HTML/JS (apenas para desenvolvimento) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="parent">
+    <div class="header">
+        <div>
+            <h1 class="brand">CosPad</h1>
+            <p class="brand-sub">Seu estúdio de música na web.</p>
+        </div>
+        <div class="header-actions" style="display:flex;gap:8px;align-items:center">
+            <button id="manual-toggle" class="theme-toggle-btn" aria-label="Abrir manual">Manual</button>
+            <button id="theme-toggle" class="theme-toggle-btn" aria-label="Alternar tema">
+                <!-- Sun icon (shown in dark mode to switch to light) -->
+                <svg class="icon icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 4V2M12 22v-2M4 12H2M22 12h-2M5 5L3.5 3.5M20.5 20.5L19 19M19 5l1.5-1.5M3.5 20.5L5 19" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>
+                </svg>
+                <!-- Moon icon (shown in light mode to switch to dark) -->
+                <svg class="icon icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+    <div class="BibliotecaDeAudio p-4">
+        <h2 class="font-bold mb-2">Biblioteca de Áudio</h2>
+        <p class="text-sm text-gray-600 mb-2">Arraste arquivos de áudio aqui ou use o botão para adicionar do seu PC.</p>
+        <div id="audio-drop-zone" class="mb-2 p-4 border-2 border-dashed rounded text-center text-sm bg-white/20">Arraste áudios aqui</div>
+        <input id="audio-file-input" type="file" accept="audio/*" multiple class="mb-2 w-full" />
+        <div id="audio-library-list" class="space-y-2 overflow-auto" style="max-height:240px;"></div>
+    </div>
+    <div class="options">
+        <button id="add-pad-button" class="bg-accent text-white p-2 rounded">Adicionar Pad</button>
+        <div class="mt-4">
+            <button id="decrease-size-button" class="bg-gray-500 text-white p-2 rounded">-</button>
+            <span class="mx-2">Tamanho</span>
+            <button id="increase-size-button" class="bg-gray-500 text-white p-2 rounded">+</button>
+        </div>
+        <hr class="my-4" />
+        <div class="options-extra">
+            <button id="save-project" class="bg-blue-600 text-white p-2 rounded mb-2 w-full">Salvar Projeto</button>
+            <button id="load-project" class="bg-gray-700 text-white p-2 rounded mb-2 w-full">Carregar Projeto (localStorage)</button>
+            <div class="flex gap-2 mb-2">
+                <button id="export-project" class="bg-green-600 text-white p-2 rounded flex-1">Exportar JSON</button>
+                <input id="import-project" type="file" accept="application/json" class="flex-1 p-2 rounded" />
+            </div>
+            <button id="clear-pads" class="bg-red-600 text-white p-2 rounded mb-2 w-full">Limpar Pads</button>
+            <button id="reset-library" class="bg-red-500 text-white p-2 rounded mb-2 w-full">Resetar Biblioteca</button>
+
+            <label class="block text-sm mt-2">Volume Global</label>
+            <input id="global-volume" type="range" min="0" max="1" step="0.01" value="1" class="w-full mb-2" />
+
+            <!-- metrônomo removido -->
+        </div>
+    </div>
+    <!-- pads vao começar aqui -->
+    <div class="pads">
+          <!-- Container principal e título -->
+        <h1 class="text-3xl font-bold text-center mb-4 text-accent">Drum Pad Web</h1>
+        <!-- Grade 3x3 para os pads -->
+        <div id="drum-grid" class="grid grid-cols-3 gap-3 md:gap-4">
+            <!-- Os pads serão preenchidos pelo JavaScript -->
+        </div>
+        
+        <!-- Display de som atual -->
+        <div class="mt-8 p-3 bg-primary-dark rounded-lg text-center">
+            <span class="text-sm text-gray-400">Som Ativo:</span>
+            <span id="display" class="block text-xl font-semibold text-accent mt-1">Nenhum</span>
+        </div>
+    
+
+    </div>
+
+    <!-- faixas vao começar aqui -->
+    <div class="faixas p-4">
+        <div class="flex items-center justify-between mb-2">
+            <h2 class="font-bold">Faixas</h2>
+            <div>
+                <button id="add-track-button" class="bg-accent text-white p-2 rounded mr-2">Adicionar Faixa</button>
+                <span class="text-sm text-gray-600">Arraste áudios da Biblioteca para uma faixa</span>
+            </div>
+        </div>
+        <div id="tracks-list" class="space-y-2" style="max-height:320px; overflow:auto;">
+            <!-- Faixas serão renderizadas aqui -->
+        </div>
+    </div>
+</div>
+<!-- Footer / Manual -->
+<footer id="manual-footer" class="manual-footer hidden">
+    <div class="manual-content">
+        <h2>Manual do CosPad</h2>
+        <p>Bem-vindo ao CosPad — seu estúdio de música na web. Aqui vai um guia rápido:</p>
+        <h3>Pads</h3>
+        <ul>
+            <li>Adicionar Pad: clique em "Adicionar Pad" na coluna Opções.</li>
+            <li>Editar Pad: clique no ícone ✎ no canto do pad para mudar nome, tecla, cor, áudio e volume.</li>
+            <li>Tocar: clique no pad ou pressione a tecla atribuída.</li>
+            <li>Arrastar áudio: arraste um item da Biblioteca para um pad para atribuir o áudio.</li>
+        </ul>
+        <h3>Biblioteca de Áudio</h3>
+        <ul>
+            <li>Arraste arquivos do seu PC para a área "Arraste áudios aqui" ou use o botão para selecionar arquivos.</li>
+            <li>Você pode pré-ouvir (▶) ou remover arquivos da biblioteca.</li>
+            <li>Ao exportar projeto, áudios locais podem ser incluídos como dataURLs (arquivo grande).</li>
+        </ul>
+        <h3>Faixas</h3>
+        <ul>
+            <li>Adicionar Faixa: botão "Adicionar Faixa" na seção Faixas.</li>
+            <li>Arraste áudios da Biblioteca para uma Faixa para atribuir.</li>
+            <li>Cada faixa tem controles de play/pause, volume e loop.</li>
+        </ul>
+        <h3>Salvar e Exportar</h3>
+        <ul>
+            <li>Salvar Projeto: salva no localStorage (apenas neste navegador).</li>
+            <li>Exportar JSON: baixa um arquivo .json com todo o projeto (inclui dataURLs se houver áudios locais).</li>
+            <li>Importar: carregue um JSON exportado para restaurar o projeto.</li>
+        </ul>
+        <h3>Temas</h3>
+        <p>Use o botão no cabeçalho para alternar entre modo claro e escuro.</p>
+        <div style="margin-top:12px;display:flex;justify-content:flex-end"><button id="manual-close" class="bg-gray-300 p-2 rounded">Fechar</button></div>
+    </div>
+</footer>
+
+<!-- Modal de Edição -->
+<div id="edit-modal" class="hidden fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+        <h2 class="text-2xl mb-4">Editar Pad</h2>
+        <form id="edit-form">
+            <input type="hidden" id="edit-pad-id">
+            <div class="mb-4">
+                <label for="edit-name" class="block text-gray-700">Nome</label>
+                <input type="text" id="edit-name" class="w-full p-2 border rounded">
+            </div>
+            <div class="mb-4">
+                <label for="edit-key" class="block text-gray-700">Tecla</label>
+                <input type="text" id="edit-key" class="w-full p-2 border rounded" maxlength="1">
+            </div>
+            <div class="mb-4">
+                <label for="edit-color" class="block text-gray-700">Cor</label>
+                <select id="edit-color" class="w-full p-2 border rounded">
+                    <option value="#2563eb">Azul</option>
+                    <option value="#7c3aed">Roxo</option>
+                    <option value="#16a34a">Verde</option>
+                    <option value="#f97316">Laranja</option>
+                    <option value="#ef4444">Vermelho</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="edit-audio" class="block text-gray-700">URL do Áudio</label>
+                <input type="text" id="edit-audio" class="w-full p-2 border rounded">
+            </div>
+            <div class="mb-4">
+                <label for="edit-volume" class="block text-gray-700">Volume do Pad</label>
+                <input id="edit-volume" type="range" min="0" max="1" step="0.01" value="1" class="w-full" />
+            </div>
+            <div class="flex justify-between">
+                <button type="button" id="delete-pad-button" class="bg-red-500 text-white p-2 rounded">Remover</button>
+                <div>
+                    <button type="button" id="cancel-edit" class="bg-gray-500 text-white p-2 rounded mr-2">Cancelar</button>
+                    <button type="submit" class="bg-accent text-white p-2 rounded">Salvar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="index.js"></script>
+
+</body>
+</html>
